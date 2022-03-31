@@ -1,0 +1,74 @@
+{% extends "BaseTemplate.html.twig" %}
+{% block title %}Categories administration{% endblock %}
+{% block content %}
+{# display categories list #}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Categories administration</h1>
+
+            {% if error is defined %}
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td>{{ category.id }}</td>
+                        <td>{{ category.name }}</td>
+                        <td>
+                            {#<a href="{{ path('/category/delete', {'id': category.id}) }}" class="btn btn-danger">Delete</a>#}
+                            <!-- add form to delete category -->
+                            <form action="/admin-category/delete" method="post">
+                                <input type="hidden" name="category_id" value="{{category.id}}">
+                                <input type="submit" value="Delete" class="btn btn-danger">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategory">
+                Add category
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<form action="/admin-category/add" method="post">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add category</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+             <label for="category_name">Category Name</label>
+            <input type="text" class="form-control" id="category_name" name="category_name" placeholder="Enter category name">
+         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Add category</button>
+      </div>
+    </div>
+  </div>
+ 
+</form>
+</div>
+
+
+{% endblock %}

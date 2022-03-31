@@ -1,0 +1,121 @@
+{% extends "BaseTemplate.html.twig" %}
+{% block title %}Users administration{% endblock %}
+{% block content %}
+{# display products list #}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Users administration</h1>
+
+            {% if error is defined %}
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email}}</td>
+                        <td>{{ user.role}}</td>
+                        <td>
+                            <form action="/admin-user/delete" method="post">
+                                <input type="hidden" name="user_id" value="{{user.id}}">
+                                <input type="submit" value="Delete" class="btn btn-danger">
+                            </form>
+                        </td>
+                        <td>
+                           <div class="modal fade" id="editRole" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <form action="/admin-user/role" method="post">
+                                    <input type="hidden" name="user_id" value="{{user.id}}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Edit role</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Role</label>
+                                                    <select class="form-control" id="user_role" name="user_role">
+                                                        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>admin</option>
+                                                        <option value="client" {% if user.role == 'client' %}selected{% endif %}>client</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Edit role</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editRole">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategory">
+                Add user
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<form action="/admin-user/add" method="post">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add user</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="user_username">User Name</label>
+            <input type="text" class="form-control" id="user_username" name="user_username" placeholder="Enter user name">
+        </div>
+        <div class="form-group">
+            <label for="user_email">User Email</label>
+            <input type="text" class="form-control" id="user_email" name="user_email" placeholder="Enter user email">
+        </div>
+        <div class="form-group">
+            <label for="user_password">User Password</label>
+            <input type="text" class="form-control" id="user_password" name="user_password" placeholder="Enter user password">
+        </div>
+       
+        <div class="form-group">
+            <label for="user_role">User Role</label>
+            <select class="form-control" id="user_role" name="user_role">
+                <option value="client">client</option>
+                <option value="admin">admin</option>
+            </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Add product</button>
+      </div>
+    </div>
+  </div>
+ 
+</form>
+</div>
+
+{% endblock %}

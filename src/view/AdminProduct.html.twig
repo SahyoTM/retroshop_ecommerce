@@ -1,0 +1,148 @@
+{% extends "BaseTemplate.html.twig" %}
+{% block title %}Products administration{% endblock %}
+{% block content %}
+{# display products list #}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Products administration</h1>
+
+            {% if error is defined %}
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.category_name }}</td>
+                        <td>{{ product.price|format_currency('EUR', {rounding_mode: 'floor'}) }}</td>
+                        <td>
+                            <form action="/admin-product/delete" method="post">
+                                <input type="hidden" name="product_id" value="{{product.id}}">
+                                <input type="submit" value="Delete" class="btn btn-danger">
+                            </form>
+                        </td>
+                        <td>
+                           <div class="modal fade" id="editProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <form action="/admin-product/edit" method="post">
+                                    <input type="hidden" name="product_id" value="{{product.id}}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Edit product</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="product_name">Product Name</label>
+                                                    <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Enter product name" value="{{product.name}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password">Product Description</label>
+                                                    <textarea class="form-control" id="product_description" name="product_description" placeholder="Enter product description">{{product.description}}</textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="product_price">Product Price</label>
+                                                    <input type="text" class="form-control" id="product_price" name="product_price" placeholder="Enter product price" value="{{product.price}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="product_image">Product Image</label>
+                                                    <input type="text" class="form-control" id="product_image" name="product_image" placeholder="Enter product image with imgurl link" value="{{product.img_url}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="product_category">Product Category</label>
+                                                    <select class="form-control" id="product_category" name="product_category">
+                                                        {% for category in categories %}
+                                                            {% if category.id == product.category_id %}
+                                                                <option value="{{category.id}}" selected>{{category.name}}</option>
+                                                            {% else %}
+                                                                <option value="{{category.id}}">{{category.name}}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Edit product</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProduct">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategory">
+                Add product
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<form action="/admin-product/add" method="post">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="product_name">Product Name</label>
+            <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Enter product name">
+        </div>
+        <div class="form-group">
+            <label for="password">Product Description</label>
+            <textarea class="form-control" id="product_description" name="product_description" placeholder="Enter product description"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="product_price">Product Price</label>
+            <input type="text" class="form-control" id="product_price" name="product_price" placeholder="Enter product price">
+        </div>
+        <div class="form-group">
+            <label for="product_image">Product Image</label>
+            <input type="text" class="form-control" id="product_image" name="product_image" placeholder="Enter product image with imgurl link">
+        </div>
+        <div class="form-group">
+            <label for="product_category">Product Category</label>
+            <select class="form-control" id="product_category" name="product_category">
+                {% for category in categories %}
+                    <option value="{{category.id}}">{{category.name}}</option>
+                {% else %}
+                    <option value="">No categories</option>
+                {% endfor %}
+            </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Add product</button>
+      </div>
+    </div>
+  </div>
+ 
+</form>
+</div>
+
+{% endblock %}

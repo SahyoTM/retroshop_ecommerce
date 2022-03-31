@@ -1,0 +1,58 @@
+{% extends "BaseTemplate.html.twig" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<div>
+    <h3>Search a product</h3>
+    <form action="/search" method="post">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="search">Search</label>
+                    <input type="text" class="form-control" id="search" name="search" placeholder="Enter name of product you search">
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select class="form-control" id="category" name="category">
+                        <option value="0" selected>No category</option>
+                        {% for category in categories %}
+                            <option value="{{category.id}}">{{category.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-4">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<div class="row">
+    <h3>Our product</h3>
+    {% for product in products %}
+        <div class="col-3">
+            <div class="card" style="width: 18rem;">
+            <img src="{{product.img_url}}" class="card-img-top">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6"> 
+                        <h5 class="card-title">{{product.name}}</h5>
+                    </div>
+                    <div class="col-6 text-end"> 
+                        <h5 class="card-title">{{product.price|format_currency('EUR', {rounding_mode: 'floor'})}}</h5>
+                    </div>
+                </div>
+                <p class="card-text">{{product.description}}</p>
+                <p class="card-text"><small class="text-muted">{{ product.category_name }}</small></p>
+            </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
