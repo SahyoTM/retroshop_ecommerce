@@ -20,7 +20,13 @@ Si votre version de PHP est inférieur à 8.0.2 :
 composer update
 ```	
 
-## Se connecter en administrateur
+## Se connecter 
+
+### Se connecter en administrateur
 
 - <b> Login </b> : admin
 - <b> Password </b> : a
+
+### Se connecter en client
+
+Créer un compte
