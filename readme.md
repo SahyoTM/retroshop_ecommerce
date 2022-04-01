@@ -14,7 +14,7 @@ Utiliser cette commande lorsque vous êtes dans le dossier du projet et dans un 
 composer install
 ```	
 
-Si votre version de PHP est inférieur à 8.0.2 :
+Si vvous avez déjà le dossier vendor, faire cette commande :
 
 ```ini
 composer update
